@@ -89,7 +89,7 @@ void
     if(pJson["{{baseName}}"].isArray()){
         auto arr = pJson["{{baseName}}"].toArray();
         for (const QJsonValue & jval : arr) {
-            {{#items.isListContainer}}auto {{name}}_item = new QList<{{items.items.baseType}}{{^items.items.isLong}}{{^items.items.isInteger}}{{^items.items.isDouble}}{{^items.items.isFloat}}{{^items.items.isBoolean}}*{{/items.items.isBoolean}}{{/items.items.isFloat}}{{/items.items.isDouble}}{{/items.items.isInteger}}{{/items.items.isLong}}>();{{/items.isListContainer}}
+            {{#items.isListContainer}}auto {{name}}_item = QList<{{items.items.baseType}}{{^items.items.isLong}}{{^items.items.isInteger}}{{^items.items.isDouble}}{{^items.items.isFloat}}{{^items.items.isBoolean}}*{{/items.items.isBoolean}}{{/items.items.isFloat}}{{/items.items.isDouble}}{{/items.items.isInteger}}{{/items.items.isLong}}>();{{/items.isListContainer}}
             {{#items.isMapContainer}}auto {{name}}_item = new QMap<QString, {{items.items.baseType}} {{^items.items.isLong}}{{^items.items.isInteger}}{{^items.items.isDouble}}{{^items.items.isFloat}}{{^items.items.isBoolean}}*{{/items.items.isBoolean}}{{/items.items.isFloat}}{{/items.items.isDouble}}{{/items.items.isInteger}}{{/items.items.isLong}}>();{{/items.isMapContainer}}
             auto jsonval = jval.toObject();
             ::{{cppNamespace}}::setValue({{name}}_item, jsonval, "{{items.baseType}}", "{{items.items.baseType}}");
@@ -100,7 +100,7 @@ void
         auto varmap = pJson["{{baseName}}"].toObject().toVariantMap();
         if(varmap.count() > 0){
             for(auto val : varmap.keys()){
-                {{#items.isListContainer}}auto {{name}}_item = new QList<{{items.items.baseType}}{{^items.items.isLong}}{{^items.items.isInteger}}{{^items.items.isDouble}}{{^items.items.isFloat}}{{^items.items.isBoolean}}*{{/items.items.isBoolean}}{{/items.items.isFloat}}{{/items.items.isDouble}}{{/items.items.isInteger}}{{/items.items.isLong}}>();{{/items.isListContainer}}
+                {{#items.isListContainer}}auto {{name}}_item = List<{{items.items.baseType}}{{^items.items.isLong}}{{^items.items.isInteger}}{{^items.items.isDouble}}{{^items.items.isFloat}}{{^items.items.isBoolean}}*{{/items.items.isBoolean}}{{/items.items.isFloat}}{{/items.items.isDouble}}{{/items.items.isInteger}}{{/items.items.isLong}}>();{{/items.isListContainer}}
                 {{#items.isMapContainer}}auto {{name}}_item = new QMap<QString, {{items.items.baseType}}{{^items.items.isLong}}{{^items.items.isInteger}}{{^items.items.isDouble}}{{^items.items.isFloat}}{{^items.items.isBoolean}}*{{/items.items.isBoolean}}{{/items.items.isFloat}}{{/items.items.isDouble}}{{/items.items.isInteger}}{{/items.items.isLong}}>();{{/items.isMapContainer}}
     		    auto jsonval = QJsonValue::fromVariant(varmap.value(val));
     		    ::{{cppNamespace}}::setValue((QMap<QString, void *>*)&{{name}}_item, jsonval, "{{items.baseType}}", "{{items.items.baseType}}");
@@ -175,14 +175,14 @@ QJsonObject
     {{#isListContainer}}
     if({{name}}->size() > 0){
         {{^items.isContainer}}
-        toJsonArray((QList<void*>*){{name}}, obj, "{{baseName}}", "{{complexType}}");
+        toJsonArray((QList<void*>){{name}}, obj, "{{baseName}}", "{{complexType}}");
         {{/items.isContainer}}
         {{#items.isContainer}}
         QJsonArray jarray;
-        for(auto items : *{{name}}){
+        for(auto items : {{name}}){
             QJsonObject jobj;
             {{#items.isListContainer}}
-            toJsonArray((QList<void*>*)items, jobj, "{{baseName}}", "{{items.items.baseType}}");
+            toJsonArray((QList<void*>)items, jobj, "{{baseName}}", "{{items.items.baseType}}");
             {{/items.isListContainer}}
             {{#items.isMapContainer}}
             toJsonMap((QMap<QString, void*>*)items, jobj, "{{baseName}}", "{{items.items.baseType}}");
@@ -200,7 +200,7 @@ QJsonObject
         for(auto itemkey : {{name}}->keys()){
             QJsonObject jobj;
             {{#items.isListContainer}}
-            toJsonArray((QList<void*>*){{name}}->value(itemkey), jobj, itemkey, "{{items.items.baseType}}");
+            toJsonArray((QList<void*>){{name}}->value(itemkey), jobj, itemkey, "{{items.items.baseType}}");
             {{/items.isListContainer}}
             {{#items.isMapContainer}}
             toJsonMap((QMap<QString, void*>*){{name}}->value(itemkey), jobj, itemkey, "{{items.items.baseType}}");

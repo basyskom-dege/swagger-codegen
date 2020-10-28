@@ -295,7 +295,7 @@ public class Qt5CPPGenerator extends AbstractCppCodegen implements CodegenConfig
         if (p instanceof ArrayProperty) {
             ArrayProperty ap = (ArrayProperty) p;
             Property inner = ap.getItems();
-            return getSwaggerType(p) + "<" + getTypeDeclaration(inner) + ">*";
+            return getSwaggerType(p) + "<" + getTypeDeclaration(inner) + ">";
         } else if (p instanceof MapProperty) {
             MapProperty mp = (MapProperty) p;
             Property inner = mp.getAdditionalProperties();
@@ -342,7 +342,7 @@ public class Qt5CPPGenerator extends AbstractCppCodegen implements CodegenConfig
         } else if (p instanceof ArrayProperty) {
             ArrayProperty ap = (ArrayProperty) p;
             Property inner = ap.getItems();
-            return "new QList<" + getTypeDeclaration(inner) + ">()";
+            return "QList<" + getTypeDeclaration(inner) + ">()";
         }
         // else
         if (p instanceof RefProperty) {

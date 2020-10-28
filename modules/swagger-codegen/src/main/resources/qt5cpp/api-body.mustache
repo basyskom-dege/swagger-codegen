@@ -45,18 +45,28 @@ void
 
     {{#collectionFormat}}
     {{^isString}}
+    {{^isListContainer}}
     if ({{{paramName}}}->size() > 0) {
+    {{/isListContainer}}
     {{/isString}}
     {{#isString}}
     if ({{{paramName}}}.size() > 0) {
     {{/isString}}
+    {{#isListContainer}}
+    if ({{{paramName}}}.size() > 0) {
+    {{/isListContainer}}
       if (QString("{{collectionFormat}}").indexOf("multi") == 0) {
         {{^isString}}
+        {{^isListContainer}}
         foreach({{{baseType}}} t, *{{paramName}}) {
+        {{/isListContainer}}
         {{/isString}}
         {{#isString}}
         foreach({{{baseType}}} t, {{paramName}}) {
         {{/isString}}
+        {{#isListContainer}}
+        foreach({{{baseType}}} t, {{paramName}}) {
+        {{/isListContainer}}
           if (fullPath.indexOf("?") > 0)
             fullPath.append("&");
           else
@@ -72,11 +82,16 @@ void
         fullPath.append("{{baseName}}=");
         qint32 count = 0;
         {{^isString}}
+        {{^isListContainer}}
         foreach({{{baseType}}} t, *{{paramName}}) {
+        {{/isListContainer}}
         {{/isString}}
         {{#isString}}
         foreach({{{baseType}}} t, {{paramName}}) {
         {{/isString}}
+        {{#isListContainer}}
+        foreach({{{baseType}}} t, {{paramName}}) {
+        {{/isListContainer}}
           if (count > 0) {
             fullPath.append(" ");
           }
@@ -91,11 +106,16 @@ void
         fullPath.append("{{baseName}}=");
         qint32 count = 0;
         {{^isString}}
+        {{^isListContainer}}
         foreach({{{baseType}}} t, *{{paramName}}) {
+        {{/isListContainer}}
         {{/isString}}
         {{#isString}}
         foreach({{{baseType}}} t, {{paramName}}) {
         {{/isString}}
+        {{#isListContainer}}
+        foreach({{{baseType}}} t, {{paramName}}) {
+        {{/isListContainer}}
           if (count > 0) {
             fullPath.append("\t");
           }
@@ -124,7 +144,7 @@ void
     {{#bodyParams}}
     {{#isContainer}}
     QJsonObject {{paramName}}_jobj;
-    toJsonArray((QList<void*>*){{paramName}}, {{paramName}}_jobj, QString("body"), QString("{{prefix}}User*"));
+    toJsonArray((QList<void*>){{paramName}}, {{paramName}}_jobj, QString("body"), QString("{{prefix}}User*"));
 
     QJsonDocument doc({{paramName}}_jobj);
     QByteArray bytes = doc.toJson();
@@ -184,7 +204,7 @@ void
         o->fromJsonObject(*ptr);
         auto objwrapper = new {{prefix}}QObjectWrapper<{{{returnBaseType}}}*> (o);
         objwrapper->deleteLater();
-        output->append(o);
+        output.append(o);
     }
     {{/isListContainer}}
     {{^isListContainer}}
